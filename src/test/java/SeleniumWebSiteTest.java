@@ -16,21 +16,25 @@ public class SeleniumWebSiteTest {
         WebDriver driver = new ChromeDriver();
         try {
 
-            driver.manage().window().maximize();
+            driver.manage().window().fullscreen();
             driver.get("https://www.selenium.dev/");
+            Thread.sleep(3000);
             driver.findElement(By.xpath("//a[contains(text(),'Downloads')]")).click();
-            WebElement latestStableVersion = driver.findElement(By.xpath("//p[contains(text(), 'Latest')]/a"));
+            WebElement latestStableVersion = driver.findElement(By.xpath("//p[contains(text(), 'Latest stable version')]/a"));
             Assert.assertEquals(latestStableVersion.getText(), "3.141.59");
             WebElement searchField = driver.findElement(By.name("search"));
             searchField.sendKeys("selenium webdriver");
             searchField.sendKeys(Keys.ENTER);
+            Thread.sleep(3000);
             List<WebElement> searchedWordsElems = driver.findElements(By.xpath("//div[@class='gs-webResult gs-result']/div/div/a"));
             long countOfReqLinks = searchedWordsElems.stream()
                     .filter(e -> e.getText().toLowerCase().contains("selenium webdriver"))
                     .count();
             Assert.assertTrue(countOfReqLinks > 0);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } finally {
-            driver.close();
+            driver.quit();
         }
     }
 }
