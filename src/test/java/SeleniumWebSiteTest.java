@@ -30,7 +30,7 @@ public class SeleniumWebSiteTest {
             long countOfReqLinks = searchedWordsElems.stream()
                     .filter(e -> e.getText().toLowerCase().contains("selenium webdriver"))
                     .count();
-            Assert.assertTrue(countOfReqLinks > 0);
+            Assert.assertTrue(countOfReqLinks > 0, "There is no link containing 'selenium webdriver' in it.");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
