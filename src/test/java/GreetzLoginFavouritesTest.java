@@ -119,7 +119,7 @@ public class GreetzLoginFavouritesTest {
         }
     }
 
-    //not mine
+    //not original
     private int getRandomNumberUsingNextInt(double max) {
         Random random = new Random();
         int maxInt = (int) max;
