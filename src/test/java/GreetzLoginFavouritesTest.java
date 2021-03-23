@@ -54,7 +54,7 @@ public class GreetzLoginFavouritesTest {
     }
 
     @Test
-    public void testBasketFunctionality() throws InterruptedException {
+    public void testFavouritesFunctionality() throws InterruptedException {
         driver = createDriverInstance();
         try {
             testLoginImpl();
@@ -64,7 +64,7 @@ public class GreetzLoginFavouritesTest {
 
             WebElement chosenItem = driver.findElement(By.xpath("//div[text()=\"Ballon 'op fleuren'\"]/ancestor::a/following-sibling::a/div"));
             chosenItem.click();
-            String expectedItemTitle = driver.findElement(By.xpath("//div[text()=\"Ballon 'op fleuren'\"]/ancestor::a")).getText();
+            String expectedItemTitle = driver.findElement(By.xpath("//a[@href='/ballonnen/detail/ballon--op-fleuren-/1142785578']/div[2]")).getText();
             String expectedItemPrice = driver.findElement(By.xpath("//div[text()=\"Ballon 'op fleuren'\"]/ancestor::a//span/span")).getText();
             Thread.sleep(3000);
 
@@ -90,7 +90,7 @@ public class GreetzLoginFavouritesTest {
     }
 
     @Test
-    public void testCardsPricingChanges() throws InterruptedException {
+    public void testCardsPricingChange() throws InterruptedException {
         driver = createDriverInstance();
         try {
             testLoginImpl();
