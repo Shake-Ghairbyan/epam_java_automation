@@ -56,11 +56,11 @@ public class GreetzLoginFavouritesTest {
     }
 
 
-    @Test
+    @Test(priority = 3)
     public void testFavouritesFunctionality() throws InterruptedException {
 
         driver.get("https://www.greetz.nl/ballonnen/denken-aan");
-        Thread.sleep(3000);
+        Thread.sleep(6000);
 
         List<WebElement> balloons = driver.findElements(By.xpath("//*[@class='b-products-grid__item']"));
         WebElement chosenBalloon = randomItem(balloons);
@@ -95,7 +95,7 @@ public class GreetzLoginFavouritesTest {
         Assert.assertEquals(actualItemTitle, expectedItemTitle, "Names: ");
     }
 
-    @Test
+    @Test(priority = 5)
     public void testCardsPricingChange() throws InterruptedException {
 
         driver.get("https://www.greetz.nl/kaarten/denken-aan");
@@ -125,10 +125,9 @@ public class GreetzLoginFavouritesTest {
     }
 
     //not original
-    private int getRandomNumberUsingNextInt(double max) {
+    private int getRandomNumberUsingNextInt(int max) {
         Random random = new Random();
-        int maxInt = (int) max;
-        return random.nextInt(maxInt);
+        return random.nextInt(max);
     }
 
     private WebElement randomItem(List<WebElement> list) {
