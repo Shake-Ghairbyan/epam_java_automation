@@ -62,17 +62,25 @@ public class GreetzLoginFavouritesTest {
             driver.get("https://www.greetz.nl/ballonnen/denken-aan");
             Thread.sleep(3000);
 
-            WebElement chosenItem = driver.findElement(By.xpath("//div[text()=\"Ballon 'op fleuren'\"]/ancestor::a/following-sibling::a/div"));
-            chosenItem.click();
-            String expectedItemTitle = driver.findElement(By.xpath("//a[@href='/ballonnen/detail/ballon--op-fleuren-/1142785578']/div[2]")).getText();
-            String expectedItemPrice = driver.findElement(By.xpath("//div[text()=\"Ballon 'op fleuren'\"]/ancestor::a//span/span")).getText();
+            List<WebElement> balloons = driver.findElements(By.xpath("//*[@class='b-products-grid__item']"));
+            WebElement chosenBalloon = randomItem(balloons);
+            WebElement favoiriteButton = chosenBalloon.findElement(By.xpath(".//a[2]/div"));
+            if (favoiriteButton.getAttribute("class").equals("b-favourite b-favourite_selected")) {
+                favoiriteButton.click();
+                Thread.sleep(3000);
+            }
+
+            favoiriteButton.click();
+
+            String expectedItemTitle = chosenBalloon.findElement(By.xpath(".//div[2]")).getText();
+            String expectedItemPrice = chosenBalloon.findElement(By.xpath(".//div[3]")).getText();
             Thread.sleep(3000);
 
             WebElement myGreetz = driver.findElement(By.linkText("MyGreetz"));
             myGreetz.click();
             Thread.sleep(3000);
 
-            WebElement favorieten = driver.findElement(By.xpath("//div[@class=\"hamburgermenu profilehamburgermenu hamburgermenu_visible\"]//span[text()='Favorieten']"));
+            WebElement favorieten = driver.findElement(By.xpath("//span[text()='Favorieten']"));
             favorieten.click();
             Thread.sleep(3000);
 
@@ -80,10 +88,11 @@ public class GreetzLoginFavouritesTest {
             favItem.click();
             Thread.sleep(3000);
 
-            String actualItemTitle = driver.findElement(By.xpath("//*[@ng-bind=\"gift.title\"]")).getText();
-            String actualItemPrice = driver.findElement(By.xpath("//*[@class=\"price-normal\"]")).getText();
-            Assert.assertTrue(actualItemPrice.contains(expectedItemPrice), "Prices of basket item: " + actualItemPrice + " and of chosen item: " + expectedItemPrice + " are different.");
-            Assert.assertTrue(actualItemTitle.contains(expectedItemTitle), "Names of basket item: " + actualItemTitle + " and chosen item: " + expectedItemTitle + "are different.");
+            String actualItemTitle = driver.findElement(By.xpath("//*[@ng-bind='gift.title']")).getText();
+            String actualItemPrice = driver.findElement(By.xpath("//*[@class='price-normal']")).getText().substring(2);
+
+            Assert.assertEquals(actualItemPrice, expectedItemPrice, "Prices: ");
+            Assert.assertEquals(actualItemTitle, expectedItemTitle, "Names: ");
         } finally {
             driver.quit();
         }
@@ -99,21 +108,28 @@ public class GreetzLoginFavouritesTest {
             Thread.sleep(3000);
 
             List<WebElement> cards = driver.findElements(By.xpath("//div[@class=\"b-card-preview__container\"]"));
-            WebElement randomChosenItem = cards.get(getRandomNumberUsingNextInt(cards.size()));
+            WebElement randomChosenItem = randomItem(cards);
             randomChosenItem.click();
             Thread.sleep(3000);
+
             WebElement randomChosenItemQuantity = driver.findElement(By.xpath("//input[@type='number']"));
             int chosenQuantity = getRandomNumberUsingNextInt(10) + 1;
             randomChosenItemQuantity.clear();
             randomChosenItemQuantity.sendKeys("" + chosenQuantity);
             Thread.sleep(2000);
-            String price = driver.findElement(By.xpath("//*[@class='price-card price-block']/span/span")).getText();
+
+            String price = driver.findElement(By.xpath("//*[@class='price-normal']")).getText();
             double priceOfItem = parsePriceStrToDouble(price);
-            String expectedTotalPrice = "" + chosenQuantity * priceOfItem;
-            String expectedTotalPriceFinal = expectedTotalPrice.replace('.', ',');
+
+            double expectedTotalPrice = chosenQuantity * priceOfItem;
+
             String actualTotalPriceLine = driver.findElement(By.xpath("//div[@class='price-total']")).getText();
-            Assert.assertTrue(actualTotalPriceLine.contains(expectedTotalPriceFinal), "Actual total price: " + actualTotalPriceLine + " and Expected price: " + expectedTotalPriceFinal + " are different.");
+            double actualTotalPrice = Double.parseDouble(actualTotalPriceLine.split(" ")[2].replace(',', '.'));
+//            .substring(7, 7 + expectedTotalPriceFinal.length());
+
+            Assert.assertEquals(actualTotalPrice, expectedTotalPrice, 0.001, "Total prices: ");
             Thread.sleep(2000);
+
         } finally {
             driver.quit();
         }
@@ -123,7 +139,11 @@ public class GreetzLoginFavouritesTest {
     private int getRandomNumberUsingNextInt(double max) {
         Random random = new Random();
         int maxInt = (int) max;
-        return random.nextInt(maxInt - 0) + 0;
+        return random.nextInt(maxInt);
+    }
+
+    private WebElement randomItem(List<WebElement> list) {
+        return list.get(getRandomNumberUsingNextInt(list.size()));
     }
 
     private double parsePriceStrToDouble(String s) {
