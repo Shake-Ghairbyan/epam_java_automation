@@ -116,12 +116,12 @@ public class GreetzLoginFavouritesTest {
         Thread.sleep(2000);
 
         String price = driver.findElement(By.xpath("//*[@class='price-normal']")).getText();
-        double priceOfItem = parsePriceStrToDouble(price);
+        double priceOfItem = parsePriceStrToDouble(price, 1);
 
         double expectedTotalPrice = chosenQuantity * priceOfItem;
 
         String actualTotalPriceLine = driver.findElement(By.xpath("//div[@class='price-total']")).getText();
-        double actualTotalPrice = Double.parseDouble(actualTotalPriceLine.split(" ")[2].replace(',', '.'));
+        double actualTotalPrice = parsePriceStrToDouble(actualTotalPriceLine, 2);
 
         Assert.assertEquals(actualTotalPrice, expectedTotalPrice, 0.001, "Total price of the item doesn't match the expected value.");
         Thread.sleep(2000);
@@ -137,8 +137,8 @@ public class GreetzLoginFavouritesTest {
         return list.get(getRandomNumber(list.size()));
     }
 
-    private double parsePriceStrToDouble(String s) {
-        String subSt = s.substring(2);
+    private double parsePriceStrToDouble(String s, int index) {
+        String subSt = s.split(" ")[index];
         String result = subSt.replace(',', '.');
         return Double.parseDouble(result);
     }
