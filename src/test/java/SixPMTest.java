@@ -36,7 +36,7 @@ public class SixPMTest {
     }
 
     @Test
-    private void check6PMMainFunctionalitiesTest() throws InterruptedException {
+    private void test6PMMainFunctionalities() throws InterruptedException {
         driver.get("https://www.6pm.com/");
         driver.manage().window().maximize() ;
 
