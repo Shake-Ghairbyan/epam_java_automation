@@ -1,0 +1,29 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="testSuiteCaclulator" verbose="1" >
+    <test name="Caclulator">
+        <classes>
+            <class name="CalculatorTest">
+                <methods>
+                    <include name="positiveSumTest"/>
+                    <include name="infinitySumTest"/>
+                    <include name="positiveAndNegativeInfinitySumTest"/>
+                    <include name="positiveNegativeInfinitySumTest"/>
+                    <include name="multiplyInfinityByZeroTest"/>
+                    <include name="multiplyByItselfTest"/>
+                    <include name="multiplyByOneTest"/>
+                    <include name="multiplyByZeroTest"/>
+                    <include name="positiveProductTest"/>
+                    <include name="subtractItselfTest"/>
+                    <include name="subtractTest"/>
+                    <include name="subtractMinFromMaxTest"/>
+                    <include name="subtractFromMaxMinTest"/>
+                    <include name="divideByZeroTest"/>
+                    <include name="divideByInfinityTest"/>
+                    <include name="infinityDivideByInfinityTest"/>
+                    <include name="positiveQuotientTest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
