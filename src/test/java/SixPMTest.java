@@ -49,7 +49,7 @@ public class SixPMTest {
         wait.until(ExpectedConditions.elementToBeClickable(accessoriesButtonLoc));
         actions.moveToElement(accessoriesButton).perform();
 
-        By aviatorLoc = By.xpath("//*[text()=\"Aviators\"]");
+        By aviatorLoc = By.xpath("//*[text()='Aviators']");
         WebElement aviatorButton = driver.findElement(aviatorLoc);
         wait.until(ExpectedConditions.elementToBeClickable(aviatorButton));
 
@@ -79,7 +79,7 @@ public class SixPMTest {
         actions.moveToElement(viewBagButton).click().build().perform();
 
         By itemInBagContainerLoc = By.xpath("//*[@class='pc-z']");
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(itemInBagContainerLoc));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(itemInBagContainerLoc));
 
         String actualName = driver.findElement(By.xpath("//div[@class='Wk-z']/a")).getText().replace('\n', ' ');
 
