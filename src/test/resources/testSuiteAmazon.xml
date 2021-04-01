@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="testSuiteAmazon" verbose="1" >
+    <test name="amazon">
+        <classes>
+            <class name="AmazonTest">
+                <methods>
+                    <include name="testHomePage"/>
+                    <include name="testAuthorSearchPage"/>
+                    <include name="testAuthorPage"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
