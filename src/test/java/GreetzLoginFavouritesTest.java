@@ -8,7 +8,6 @@ import org.testng.asserts.SoftAssert;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Random;
 
 public class GreetzLoginFavouritesTest {
 
@@ -64,7 +63,7 @@ public class GreetzLoginFavouritesTest {
         Thread.sleep(6000);
 
         List<WebElement> balloons = driver.findElements(By.xpath("//*[@class='b-products-grid__item']"));
-        WebElement chosenBalloon = randomItem(balloons);
+        WebElement chosenBalloon = Utils.randomItem(balloons);
         WebElement starButton = chosenBalloon.findElement(By.xpath(".//a[2]/div"));
         if (starButton.getAttribute("class").equals("b-favourite b-favourite_selected")) {
             starButton.click();
@@ -105,12 +104,12 @@ public class GreetzLoginFavouritesTest {
         Thread.sleep(3000);
 
         List<WebElement> cards = driver.findElements(By.xpath("//div[@class=\"b-card-preview__container\"]"));
-        WebElement randomChosenItem = randomItem(cards);
+        WebElement randomChosenItem = Utils.randomItem(cards);
         randomChosenItem.click();
         Thread.sleep(3000);
 
         WebElement randomChosenItemQuantity = driver.findElement(By.xpath("//input[@type='number']"));
-        int chosenQuantity = getRandomNumber(10) + 1;
+        int chosenQuantity = Utils.getRandomNumber(10) + 1;
         randomChosenItemQuantity.clear();
         randomChosenItemQuantity.sendKeys("" + chosenQuantity);
         Thread.sleep(2000);
@@ -125,16 +124,6 @@ public class GreetzLoginFavouritesTest {
 
         Assert.assertEquals(actualTotalPrice, expectedTotalPrice, 0.001, "Total price of the item doesn't match the expected value.");
         Thread.sleep(2000);
-    }
-
-    //not original
-    private int getRandomNumber(int max) {
-        Random random = new Random();
-        return random.nextInt(max);
-    }
-
-    private WebElement randomItem(List<WebElement> list) {
-        return list.get(getRandomNumber(list.size()));
     }
 
     private double parsePriceStrToDouble(String s, int index) {
