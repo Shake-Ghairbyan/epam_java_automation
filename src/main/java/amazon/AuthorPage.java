@@ -16,8 +16,7 @@ public class AuthorPage {
 
     private final WebDriver driver;
 
-    private static final String booksBySectionIDContent = "booksBySection";
-    @FindBy(id = booksBySectionIDContent)
+    @FindBy(id = "booksBySection")
     WebElement booksByAuthor;
 
     private static final String priceOfBookDivXpathContent = "//*[@class='a-fixed-left-grid a-spacing-small']";
@@ -30,8 +29,7 @@ public class AuthorPage {
     })
     List<WebElement> pricesOfBooks;
 
-    private static final String sortBySelectorsIDContent = "sortBySelectors";
-    @FindBy(id = sortBySelectorsIDContent)
+    @FindBy(id = "sortBySelectors")
     WebElement sortBySelectorsButton;
 
     private static final String sortByPriceLowToHighButtonXpathContent = "//a[contains(text(),'Price: Low to High')]";

@@ -44,7 +44,8 @@ public class AmazonTest {
 
         int actualCount = authorSearchPage.countOfSearchResultsContainingAuthor(authorName);
         int expectedCount = authorSearchPage.countOfResultsOnFirstPage();
-        String assertMessageForAuthorNameCount = String.format("%s is not author in all search results on the firs page.", authorName.toUpperCase());
+        String assertMessageForAuthorNameCount = String.format("%s is not author in all search results on the firs page.",
+                authorName.toUpperCase());
 
         softAssert.assertEquals(actualCount, expectedCount, assertMessageForAuthorNameCount);
 

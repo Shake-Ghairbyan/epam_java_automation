@@ -13,8 +13,7 @@ public class HomePage {
 
     private final WebDriver driver;
 
-    private static final String deliveryTargetTextIDContent = "glow-ingress-block";
-    @FindBy(id = deliveryTargetTextIDContent)
+    @FindBy(id = "deliveryTargetTextIDContent")
     WebElement deliveryTargetLocation;
 
 
@@ -24,17 +23,15 @@ public class HomePage {
 
 
     private static final String navBarIDContent = "navbar";
-    @FindBy(id = navBarIDContent)
+    @FindBy(id = "navbar")
     WebElement navBar;
 
 
-    private static final String searchTabXpathContent = "//*[@type='text']";
-    @FindBy(xpath = searchTabXpathContent)
+    @FindBy(xpath = "//*[@type='text']")
     WebElement searchTab;
 
 
-    private static final String searchButtonIDContent = "nav-search-submit-button";
-    @FindBy(id = searchButtonIDContent)
+    @FindBy(id = "nav-search-submit-button")
     WebElement searchButton;
 
     public HomePage(WebDriver driver) {
