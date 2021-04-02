@@ -23,13 +23,11 @@ public class HomePage {
 
     public String getDeliveryTargetCountry() {
         WebElement deliveryTargetLocation = driver.findElement(deliveryTargetTextLoc);
-        noSuchElement(deliveryTargetLocation);
         return deliveryTargetLocation.getText().replace('\n', ' ');
     }
 
     public void enterAuthorNameAndSearch(String fullName) {
         WebElement searchTab = driver.findElement(searchTabLoc);
-        noSuchElement(searchTab);
         searchTab.sendKeys(fullName);
         searchTab.sendKeys(Keys.RETURN);
 
@@ -39,14 +37,7 @@ public class HomePage {
 
     public void clickBooksFromNavBar() {
         WebElement books = driver.findElement(navBarBooksLoc);
-        noSuchElement(books);
         books.click();
-    }
-
-    private void noSuchElement(WebElement element) {
-        if (element == null) {
-            throw new RuntimeException("ERROR: No such element");
-        }
     }
 
     public void waitUntilPageLoads() {
