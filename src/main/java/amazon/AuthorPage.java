@@ -6,7 +6,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AuthorPage {
 
@@ -42,16 +44,11 @@ public class AuthorPage {
         sortByPriceLowToHighButton.click();
     }
 
-    public boolean areSortedByPriceLowToHigh() {
+    public List<Double> getPricesOfBooks() {
         List<WebElement> pricesOfBooks = driver.findElements(priceOfBookLoc);
-        for (int i = 1; i < pricesOfBooks.size(); i++) {
-            double current = parseStringToDouble(pricesOfBooks.get(i).getText());
-            double previous = parseStringToDouble(pricesOfBooks.get(i - 1).getText());
-            if (previous > current) {
-                return false;
-            }
-        }
-        return true;
+        return pricesOfBooks.stream()
+                .map(priceStr -> parseStringToDouble(priceStr.getText()))
+                .collect(Collectors.toList());
     }
 
     private double parseStringToDouble(String price) {

@@ -45,7 +45,7 @@ public class AuthorSearchPage {
                 .count();
     }
 
-    public WebElement authorNameIsClickable(String authorName) throws Exception {
+    public WebElement getLinkWithTargetedAuthorName(String authorName) throws Exception {
         List<WebElement> searchResultsAuthorLinks = driver.findElements(searchResultsAuthorLinksLoc);
         for (WebElement e : searchResultsAuthorLinks) {
             if (e.getText().toLowerCase().equals(authorName)) {
@@ -54,5 +54,4 @@ public class AuthorSearchPage {
         }
         throw new Exception("Author name in search results is not clickable.");
     }
-
 }

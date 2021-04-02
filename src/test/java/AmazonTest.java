@@ -6,6 +6,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 
+import java.util.List;
+
 public class AmazonTest {
 
     private WebDriver driver;
@@ -46,7 +48,7 @@ public class AmazonTest {
 
         softAssert.assertEquals(actualCount, expectedCount, assertMessageForAuthorNameCount);
 
-        authorSearchPage.authorNameIsClickable(authorName).click();
+        authorSearchPage.getLinkWithTargetedAuthorName(authorName).click();
 
         AuthorPage authorPage = new AuthorPage(driver);
         authorPage.waitUntilPageLoads();
@@ -59,8 +61,14 @@ public class AmazonTest {
         authorPage.sortByPriceLowToHigh();
         authorPage.waitUntilPageLoads();
 
-        boolean assertCond = authorPage.areSortedByPriceLowToHigh();
-        softAssert.assertTrue(assertCond, "Books are not sorted from low to high by price.");
+        String assertMessageForBooksSort = "Books are not sorted from low to high by price.";
+        List<Double> pricesOfBooks = authorPage.getPricesOfBooks();
+        for (int i = 1; i < pricesOfBooks.size(); i++) {
+            double current = pricesOfBooks.get(i);
+            double previous = pricesOfBooks.get(i - 1);
+            softAssert.assertTrue(previous <= current, assertMessageForBooksSort);
+        }
+
         softAssert.assertAll();
     }
 
@@ -71,5 +79,4 @@ public class AmazonTest {
             driver = null;
         }
     }
-
 }
