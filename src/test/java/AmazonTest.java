@@ -9,7 +9,7 @@ import org.testng.asserts.SoftAssert;
 public class AmazonTest {
 
     private WebDriver driver;
-    private String authorName = "jane austen";
+    private String authorName = "stephen king";
 
     @BeforeSuite
     private void setSystemProperties() {
@@ -22,8 +22,8 @@ public class AmazonTest {
         driver.get("https://www.amazon.com/");
     }
 
-    @Test(priority = 1)
-    private void testHomePage() {
+    @Test
+    private void testAuthorSearchAndBooksPriceSorting() throws Exception {
         HomePage homePage = new HomePage(driver);
         homePage.waitUntilPageLoads();
 
@@ -31,39 +31,30 @@ public class AmazonTest {
         String expectedDeliveryCountry = "Deliver to Armenia";
 
         SoftAssert softAssert = new SoftAssert();
-        String assertMessage = "Delivery address differs from expected one.";
-        softAssert.assertEquals(actualDeliveryCountry, expectedDeliveryCountry, assertMessage);
+        String assertMessageForDeliveryAdd = "Delivery address differs from expected one.";
+        softAssert.assertEquals(actualDeliveryCountry, expectedDeliveryCountry, assertMessageForDeliveryAdd);
 
         homePage.clickBooksFromNavBar();
         homePage.enterAuthorNameAndSearch(authorName);
-    }
-
-    @Test(priority = 2)
-    private void testAuthorSearchPage() throws Exception {
 
         AuthorSearchPage authorSearchPage = new AuthorSearchPage(driver);
         authorSearchPage.waitUntilPageLoads();
 
         int actualCount = authorSearchPage.countOfSearchResultsContainingAuthor(authorName);
-        int expectedCount = authorSearchPage.countOfResultsOnFirsPage();
-        String assertMessage = String.format("%s is not author in all search results on the firs page.", authorName.toUpperCase());
+        int expectedCount = authorSearchPage.countOfResultsOnFirstPage();
+        String assertMessageForAuthorNameCount = String.format("%s is not author in all search results on the firs page.", authorName.toUpperCase());
 
-        SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(actualCount, expectedCount, assertMessage);
+        softAssert.assertEquals(actualCount, expectedCount, assertMessageForAuthorNameCount);
 
         authorSearchPage.authorNameIsClickable(authorName).click();
-    }
 
-    @Test(priority = 3)
-    private void testAuthorPage() {
         AuthorPage authorPage = new AuthorPage(driver);
         authorPage.waitUntilPageLoads();
 
-        SoftAssert softAssert = new SoftAssert();
         String expectedBooksByAuthorText = String.format("books by %s", authorName);
         String actualBooksByAuthorText = authorPage.booksByAuthorText();
-        String assertMessageAuthor = "Author name in books by section field differs from expected one.";
-        softAssert.assertEquals(actualBooksByAuthorText, expectedBooksByAuthorText, assertMessageAuthor);
+        String assertMessageForAuthorName = "Author name in books by section field differs from expected one.";
+        softAssert.assertEquals(actualBooksByAuthorText, expectedBooksByAuthorText, assertMessageForAuthorName);
 
         authorPage.sortByPriceLowToHigh();
         authorPage.waitUntilPageLoads();

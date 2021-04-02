@@ -25,7 +25,7 @@ public class AuthorSearchPage {
     public void waitUntilPageLoads() {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(searchResultsLoc));
-        wait.until(ExpectedConditions.numberOfElementsToBe(searchResultsLoc, countOfResultsOnFirsPage()));
+        wait.until(ExpectedConditions.numberOfElementsToBe(searchResultsLoc, countOfResultsOnFirstPage()));
     }
 
     private int parsStringToInt(String line) {
@@ -33,7 +33,7 @@ public class AuthorSearchPage {
         return Integer.parseInt(result);
     }
 
-    public int countOfResultsOnFirsPage() {
+    public int countOfResultsOnFirstPage() {
         WebElement countOfSearchResultsOnFirstPage = driver.findElement(countOfSearchResultsOnFirstPagLoc);
         return parsStringToInt(countOfSearchResultsOnFirstPage.getText());
     }
