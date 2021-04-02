@@ -13,7 +13,7 @@ public class HomePage {
 
     private final WebDriver driver;
 
-    @FindBy(id = "deliveryTargetTextIDContent")
+    @FindBy(id = "glow-ingress-block")
     WebElement deliveryTargetLocation;
 
 
