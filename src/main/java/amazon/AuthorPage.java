@@ -24,9 +24,7 @@ public class AuthorPage {
     WebElement priceOfBookDiv;
 
     private static final String pricesOfBookXpathContent = "//span[@class='a-size-base-plus a-color-price a-text-bold']/span";
-    @FindBys({
-            @FindBy(xpath = pricesOfBookXpathContent)
-    })
+    @FindBy(xpath = pricesOfBookXpathContent)
     List<WebElement> pricesOfBooks;
 
     @FindBy(id = "sortBySelectors")

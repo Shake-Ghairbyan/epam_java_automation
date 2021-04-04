@@ -26,16 +26,12 @@ public class AuthorSearchPage {
 
 
     private static final String searchResultsUnderLineXpathContent = "//h2[@class='a-size-mini a-spacing-none a-color-base s-line-clamp-2']/following-sibling::div";
-    @FindBys({
-            @FindBy(xpath = searchResultsUnderLineXpathContent)
-    })
+    @FindBy(xpath = searchResultsUnderLineXpathContent)
     List<WebElement> searchResultsUnderLine;
 
 
     private static final String searchResultsAuthorLinksXpathContent = "//h2[@class='a-size-mini a-spacing-none a-color-base s-line-clamp-2']/following-sibling::div/a";
-    @FindBys({
-            @FindBy(xpath = searchResultsAuthorLinksXpathContent)
-    })
+    @FindBy(xpath = searchResultsAuthorLinksXpathContent)
     List<WebElement> searchResultsAuthorLinks;
 
 
