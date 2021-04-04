@@ -4,7 +4,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -20,8 +19,7 @@ public class AuthorSearchPage {
     WebElement searchResults;
 
 
-    private static final String countOfSearchResultsOnFirstPagXpathContent = "//*[@class='a-section a-spacing-small a-spacing-top-small']/span";
-    @FindBy(xpath = countOfSearchResultsOnFirstPagXpathContent)
+    @FindBy(xpath = "//*[@class='a-section a-spacing-small a-spacing-top-small']/span")
     WebElement countOfSearchResultsOnFirstPage;
 
 
@@ -30,10 +28,9 @@ public class AuthorSearchPage {
     List<WebElement> searchResultsUnderLine;
 
 
-    private static final String searchResultsAuthorLinksXpathContent = "//h2[@class='a-size-mini a-spacing-none a-color-base s-line-clamp-2']/following-sibling::div/a";
+    private static final String searchResultsAuthorLinksXpathContent = "//h2[@class='a-size-mini a-spacing-none a-color-base s-line-clamp-2']/following-sibling::div//a";
     @FindBy(xpath = searchResultsAuthorLinksXpathContent)
     List<WebElement> searchResultsAuthorLinks;
-
 
     public AuthorSearchPage(WebDriver driver) {
         this.driver = driver;
