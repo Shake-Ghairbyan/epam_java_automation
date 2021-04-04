@@ -44,7 +44,8 @@ public class AmazonTest {
 
         int actualCount = authorSearchPage.countOfSearchResultsContainingAuthor(authorName);
         int expectedCount = authorSearchPage.countOfResultsOnFirstPage();
-        String assertMessageForAuthorNameCount = String.format("%s is not author in all search results on the firs page.", authorName.toUpperCase());
+        String assertMessageForAuthorNameCount = String.format("%s is not author in all search results on the first page.",
+                authorName.toUpperCase());
 
         softAssert.assertEquals(actualCount, expectedCount, assertMessageForAuthorNameCount);
 
@@ -53,7 +54,7 @@ public class AmazonTest {
         AuthorPage authorPage = new AuthorPage(driver);
         authorPage.waitUntilPageLoads();
 
-        String expectedBooksByAuthorText = String.format("books by %s", authorName);
+        String expectedBooksByAuthorText = String.format("titles by %s", authorName);
         String actualBooksByAuthorText = authorPage.booksByAuthorText();
         String assertMessageForAuthorName = "Author name in books by section field differs from expected one.";
         softAssert.assertEquals(actualBooksByAuthorText, expectedBooksByAuthorText, assertMessageForAuthorName);

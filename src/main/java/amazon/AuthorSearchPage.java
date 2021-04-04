@@ -3,6 +3,8 @@ package amazon;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -10,22 +12,36 @@ import java.util.List;
 
 public class AuthorSearchPage {
 
-    private WebDriver driver;
+    private final WebDriver driver;
 
-    private By searchResultsLoc = By.xpath("//*[@data-component-type='s-search-result']");
-    private By countOfSearchResultsOnFirstPagLoc = By.xpath("//*[@class='a-section a-spacing-small a-spacing-top-small']/span");
-    private By searchResultsUnderLineLoc = By.xpath("//h2[@class='a-size-mini a-spacing-none a-color-base s-line-clamp-2']/following-sibling::div");
-    private By searchResultsAuthorLinksLoc = By.xpath("//h2[@class='a-size-mini a-spacing-none a-color-base s-line-clamp-2']/following-sibling::div/a");
+    private static final String searchResultsXpathContent = "//*[@data-component-type='s-search-result']";
+    @FindBy(xpath = searchResultsXpathContent)
+    WebElement searchResults;
+
+
+    @FindBy(xpath = "//*[@class='a-section a-spacing-small a-spacing-top-small']/span")
+    WebElement countOfSearchResultsOnFirstPage;
+
+
+    private static final String searchResultsUnderLineXpathContent = "//h2[@class='a-size-mini a-spacing-none a-color-base s-line-clamp-2']/following-sibling::div";
+    @FindBy(xpath = searchResultsUnderLineXpathContent)
+    List<WebElement> searchResultsUnderLine;
+
+
+    private static final String searchResultsAuthorLinksXpathContent = "//h2[@class='a-size-mini a-spacing-none a-color-base s-line-clamp-2']/following-sibling::div//a";
+    @FindBy(xpath = searchResultsAuthorLinksXpathContent)
+    List<WebElement> searchResultsAuthorLinks;
 
     public AuthorSearchPage(WebDriver driver) {
         this.driver = driver;
+        PageFactory.initElements(driver, this);
     }
 
 
     public void waitUntilPageLoads() {
         WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(searchResultsLoc));
-        wait.until(ExpectedConditions.numberOfElementsToBe(searchResultsLoc, countOfResultsOnFirstPage()));
+        wait.until(ExpectedConditions.visibilityOfAllElements(searchResults));
+        wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath(searchResultsXpathContent), countOfResultsOnFirstPage()));
     }
 
     private int parsStringToInt(String line) {
@@ -34,19 +50,16 @@ public class AuthorSearchPage {
     }
 
     public int countOfResultsOnFirstPage() {
-        WebElement countOfSearchResultsOnFirstPage = driver.findElement(countOfSearchResultsOnFirstPagLoc);
         return parsStringToInt(countOfSearchResultsOnFirstPage.getText());
     }
 
     public int countOfSearchResultsContainingAuthor(String authorName) {
-        List<WebElement> searchResultsUnderLine = driver.findElements(searchResultsUnderLineLoc);
         return (int) searchResultsUnderLine.stream()
                 .filter(e -> e.getText().toLowerCase().contains(authorName))
                 .count();
     }
 
     public WebElement getLinkWithTargetedAuthorName(String authorName) throws Exception {
-        List<WebElement> searchResultsAuthorLinks = driver.findElements(searchResultsAuthorLinksLoc);
         for (WebElement e : searchResultsAuthorLinks) {
             if (e.getText().toLowerCase().equals(authorName)) {
                 return e;
