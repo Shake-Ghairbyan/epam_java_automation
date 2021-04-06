@@ -6,12 +6,16 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AmazonTest {
 
     private WebDriver driver;
-    private String authorName = "stephen king";
 
     @BeforeSuite
     private void setSystemProperties() {
@@ -24,17 +28,16 @@ public class AmazonTest {
         driver.get("https://www.amazon.com/");
     }
 
-    @Test
-    private void testAuthorSearchAndBooksPriceSorting() throws Exception {
+    @Test(dataProvider = "myDataProvider")
+    private void testAuthorSearchAndBooksPriceSorting(String authorName, String deliveryCountry) throws Exception {
         HomePage homePage = new HomePage(driver);
         homePage.waitUntilPageLoads();
 
         String actualDeliveryCountry = homePage.getDeliveryTargetCountry();
-        String expectedDeliveryCountry = "Deliver to Armenia";
 
         SoftAssert softAssert = new SoftAssert();
         String assertMessageForDeliveryAdd = "Delivery address differs from expected one.";
-        softAssert.assertEquals(actualDeliveryCountry, expectedDeliveryCountry, assertMessageForDeliveryAdd);
+        softAssert.assertEquals(actualDeliveryCountry, deliveryCountry, assertMessageForDeliveryAdd);
 
         homePage.clickBooksFromNavBar();
         homePage.enterAuthorNameAndSearch(authorName);
@@ -44,7 +47,8 @@ public class AmazonTest {
 
         int actualCount = authorSearchPage.countOfSearchResultsContainingAuthor(authorName);
         int expectedCount = authorSearchPage.countOfResultsOnFirstPage();
-        String assertMessageForAuthorNameCount = String.format("%s is not author in all search results on the firs page.", authorName.toUpperCase());
+        String assertMessageForAuthorNameCount = String.format("%s is not author in all search results on the firs page.",
+                authorName.toUpperCase());
 
         softAssert.assertEquals(actualCount, expectedCount, assertMessageForAuthorNameCount);
 
@@ -53,7 +57,7 @@ public class AmazonTest {
         AuthorPage authorPage = new AuthorPage(driver);
         authorPage.waitUntilPageLoads();
 
-        String expectedBooksByAuthorText = String.format("books by %s", authorName);
+        String expectedBooksByAuthorText = String.format("titles by %s", authorName);
         String actualBooksByAuthorText = authorPage.booksByAuthorText();
         String assertMessageForAuthorName = "Author name in books by section field differs from expected one.";
         softAssert.assertEquals(actualBooksByAuthorText, expectedBooksByAuthorText, assertMessageForAuthorName);
@@ -79,4 +83,17 @@ public class AmazonTest {
             driver = null;
         }
     }
+
+    @DataProvider(name = "myDataProvider")
+    public static Object[][] myDataProviderMethod() throws IOException {
+        List<String> paramsStr = Files.readAllLines(Paths.get("src/test/resources/params.csv"));
+        List<String[]> params = new ArrayList<>();
+        for (String p : paramsStr) {
+            params.add(p.split(","));
+        }
+
+        return params.toArray(new Object[0][0]);
+    }
 }
+
+

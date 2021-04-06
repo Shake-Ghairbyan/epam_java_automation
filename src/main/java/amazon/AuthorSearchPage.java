@@ -15,7 +15,7 @@ public class AuthorSearchPage {
     private By searchResultsLoc = By.xpath("//*[@data-component-type='s-search-result']");
     private By countOfSearchResultsOnFirstPagLoc = By.xpath("//*[@class='a-section a-spacing-small a-spacing-top-small']/span");
     private By searchResultsUnderLineLoc = By.xpath("//h2[@class='a-size-mini a-spacing-none a-color-base s-line-clamp-2']/following-sibling::div");
-    private By searchResultsAuthorLinksLoc = By.xpath("//h2[@class='a-size-mini a-spacing-none a-color-base s-line-clamp-2']/following-sibling::div/a");
+    private By searchResultsAuthorLinksLoc = By.xpath("//h2[@class='a-size-mini a-spacing-none a-color-base s-line-clamp-2']/following-sibling::div//a");
 
     public AuthorSearchPage(WebDriver driver) {
         this.driver = driver;
