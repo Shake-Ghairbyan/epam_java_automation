@@ -9,6 +9,19 @@ import org.testng.asserts.SoftAssert;
 
 public class GoRestTest {
 
+    private final String token = "a27efba58da81f96b92922bc4ed805103264a09f6819ac931005cd609f7419fa";
+
+    private final String body_template = """
+            {
+                "name": "Shake:%s",
+                "email": "ShakeGh_11%s@epam.com",
+                "gender": "Female",
+                "status": "Inactive"
+            }
+            """;
+
+    Header header = new Header("Authorization", "Bearer " + token);
+
     @BeforeClass
     public void setUp() {
         RestAssured.baseURI = "https://gorest.co.in/";
@@ -16,19 +29,10 @@ public class GoRestTest {
     }
 
     @Test
-    public void testGoRest() {
-        final String token = "a27efba58da81f96b92922bc4ed805103264a09f6819ac931005cd609f7419fa";
+    public void testPost() {
 
-        final String body = """
-                    {
-                    "name": "Shake",
-                    "email": "ShakeGh_11@epam.com",
-                    "gender": "Female",
-                    "status": "Inactive"
-                }
-                """;
-
-        Header header = new Header("Authorization", "Bearer " + token);
+        final long unique_id = System.currentTimeMillis();
+        String body = String.format(body_template, unique_id, unique_id);
 
         ValidatableResponse responsePost = RestAssured
                 .given()
@@ -39,13 +43,28 @@ public class GoRestTest {
                 .post("users")
                 .then();
 
-        responsePost.extract().response().prettyPrint();
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertEquals(Integer.parseInt(getJsonPathParam(responsePost, "code")), 201, "User was not created.");
+        softAssert.assertEquals(getJsonPathParam(responsePost, "data.name"), String.format("Shake%s", unique_id), "User was not created.");
+    }
 
-        String postedUserId = responsePost.extract().jsonPath().get("data.id").toString();
-        String postedUserName = responsePost.extract().jsonPath().get("data.name").toString();
+    @Test
+    public void testDuplicate() {
+
+        final long unique_id = System.currentTimeMillis();
+        String body = String.format(body_template, unique_id, unique_id);
+
+        ValidatableResponse initialCheck = RestAssured
+                .given()
+                .header(header)
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .post("users")
+                .then();
 
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(postedUserName, "Shake", "User creation failed.");
+        softAssert.assertEquals(Integer.parseInt(getJsonPathParam(initialCheck, "code")), 201, "User was not created.");
 
 
         ValidatableResponse responseCheck = RestAssured
@@ -57,9 +76,29 @@ public class GoRestTest {
                 .post("users")
                 .then();
 
-        int duplicatedResUser = responseCheck.extract().response().jsonPath().get("code");
-        softAssert.assertEquals(duplicatedResUser, 422, "Something went wrong! Duplicated user.");
+        softAssert.assertEquals(Integer.parseInt(getJsonPathParam(responseCheck, "code")), 422, "Something went wrong! Duplicated user.");
+        softAssert.assertAll();
+    }
 
+    @Test
+    public void testDelete() {
+
+        final long unique_id = System.currentTimeMillis();
+        String body = String.format(body_template, unique_id, unique_id);
+
+        ValidatableResponse initialCheck = RestAssured
+                .given()
+                .header(header)
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .post("users")
+                .then();
+
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertEquals(Integer.parseInt(getJsonPathParam(initialCheck, "code")), 201, "User was not created.");
+
+        String postedUserId = getJsonPathParam(initialCheck, "data.id");
 
         Response responseDelete = RestAssured
                 .given()
@@ -71,7 +110,10 @@ public class GoRestTest {
                 .response();
 
         softAssert.assertEquals(responseDelete.statusCode(), 200, "User deletion failed.");
-
         softAssert.assertAll();
+    }
+
+    private String getJsonPathParam(ValidatableResponse response, String param) {
+        return response.extract().jsonPath().get(param).toString();
     }
 }
